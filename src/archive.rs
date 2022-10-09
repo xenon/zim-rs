@@ -13,7 +13,7 @@ pub struct Archive {
 }
 
 impl Archive {
-    fn inner_ref(&self) -> &ffi::Archive {
+    pub(crate) fn inner_ref(&self) -> &ffi::Archive {
         self.ptr.as_ref().unwrap()
     }
 

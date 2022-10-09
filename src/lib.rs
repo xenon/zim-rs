@@ -5,4 +5,9 @@ pub mod archive;
 pub mod blob;
 pub mod entry;
 pub mod item;
+pub mod search;
+pub mod suggestion;
 pub mod uuid;
+
+#[cfg(test)]
+mod test;
