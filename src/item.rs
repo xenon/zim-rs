@@ -35,8 +35,7 @@ impl Item {
     }
 
     pub fn get_mimetype(&self) -> Result<String, ()> {
-        let mimetype = ffi::item_getMimetype(self.inner_ref());
-        string_from_ptr(mimetype)
+        string_from_ptr(ffi::item_getMimetype(self.inner_ref()))
     }
 
     pub fn get_data(&self) -> Result<Blob, ()> {

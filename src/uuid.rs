@@ -18,19 +18,16 @@ impl Uuid {
     }
 
     pub fn new_empty() -> Result<Uuid, ()> {
-        let ptr = ffi::uuid_ctor();
-        Uuid::from_ptr(ptr)
+        Uuid::from_ptr(ffi::uuid_ctor())
     }
 
     /// This data should really only be 16 bytes long, but if it's longer it won't hurt, it will fail if shorter however
     pub fn new_from_bytes(uuid: &str) -> Result<Uuid, ()> {
-        let ptr = ffi::uuid_ctor_str(uuid);
-        Uuid::from_ptr(ptr)
+        Uuid::from_ptr(ffi::uuid_ctor_str(uuid))
     }
 
     pub fn new_generate(value: &str) -> Result<Uuid, ()> {
-        let ptr = ffi::uuid_generate(value);
-        Uuid::from_ptr(ptr)
+        Uuid::from_ptr(ffi::uuid_generate(value))
     }
 }
 

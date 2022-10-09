@@ -50,8 +50,7 @@ impl Archive {
     }
 
     pub fn get_metadata(&self, name: &str) -> Result<String, ()> {
-        let metadata = ffi::archive_getMetadata(self.inner_ref(), name);
-        string_from_ptr(metadata)
+        string_from_ptr(ffi::archive_getMetadata(self.inner_ref(), name))
     }
 
     pub fn get_metadata_item(&self, name: &str) -> Result<Item, ()> {
@@ -108,8 +107,7 @@ impl Archive {
     }
 
     pub fn get_checksum(&self) -> Result<String, ()> {
-        let checksum = ffi::archive_getChecksum(self.inner_ref());
-        string_from_ptr(checksum)
+        string_from_ptr(ffi::archive_getChecksum(self.inner_ref()))
     }
 
     pub fn check(&self) -> bool {

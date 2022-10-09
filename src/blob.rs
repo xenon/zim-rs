@@ -20,10 +20,7 @@ impl Blob {
     }
 
     pub fn data(&self) -> Result<String, ()> {
-        unsafe {
-            let ptr = ffi::blob_data(self.inner_ref());
-            string_from_char_array(ptr)
-        }
+        unsafe { string_from_char_array(ffi::blob_data(self.inner_ref())) }
     }
 
     pub fn size(&self) -> u64 {
