@@ -7,5 +7,5 @@ Once both the crates are in the directory, a dependency can be added using a ``p
 
 ## TODO List
 - Cleanup Result types
-- Searches
-- Suggestions
+- More complete iterators for Searches and Suggestions rather than only basic IntoIterator
+- Add more tests
