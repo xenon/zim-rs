@@ -121,4 +121,69 @@ impl Archive {
     pub fn has_new_namespace_scheme(&self) -> bool {
         ffi::archive_hasNewNamespaceScheme(self.inner_ref())
     }
+
+    pub fn iter_efficient(&self) -> Result<EntryRangeEfficient, ()> {
+        EntryRangeEfficient::from_ptr(ffi::archive_iterEfficient(self.inner_ref()))
+    }
 }
+
+
+pub struct EntryRangeEfficient {
+    ptr: UniquePtr<ffi::EntryRangeEfficient>,
+}
+
+impl EntryRangeEfficient {
+    pub(crate) fn inner_ref(&self) -> &ffi::EntryRangeEfficient {
+        self.ptr.as_ref().unwrap()
+    }
+
+    pub(crate) fn from_ptr(ptr: UniquePtr<ffi::EntryRangeEfficient>) -> Result<EntryRangeEfficient, ()> {
+        match ptr.is_null() {
+            true => Err(()),
+            false => Ok(EntryRangeEfficient { ptr }),
+        }
+    }
+
+}
+
+impl IntoIterator for EntryRangeEfficient {
+    type Item = Result<Entry, ()>;
+    type IntoIter = IterEfficient;
+
+    fn into_iter(self) -> Self::IntoIter {
+        IterEfficient {
+            current : ffi::entryrangeefficient_begin(self.inner_ref()),
+            end: ffi::entryrangeefficient_end(self.inner_ref())
+        }
+    }
+}
+
+
+pub struct IterEfficient {
+    current : UniquePtr<ffi::IterEfficient>,
+    end : UniquePtr<ffi::IterEfficient>
+}
+
+impl IterEfficient {
+    fn inner_current(&self) -> &ffi::IterEfficient {
+        self.current.as_ref().unwrap()
+    }
+
+    fn inner_end(&self) -> &ffi::IterEfficient {
+        self.end.as_ref().unwrap()
+    }
+}
+
+impl Iterator for IterEfficient {
+    type Item = Result<Entry, ()>;
+    fn next(&mut self) -> Option<Self::Item> {
+        if !ffi::iterefficient_eq(self.inner_current(), self.inner_end()) {
+            let entry = Entry::from_ptr(ffi::iterefficient_star(self.inner_current()));
+            ffi::iterefficient_inc(self.current.pin_mut());
+            Some(entry)
+        } else {
+            None
+        }
+    }
+}
+
